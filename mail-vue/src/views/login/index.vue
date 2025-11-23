@@ -140,9 +140,7 @@
         </el-button>
       </div>
     </el-dialog>
-    <a class="github" href="https://github.com/maillab/cloud-mail">
-      <Icon icon="mingcute:github-line" color="#1890ff" width="20" height="20" />
-    </a>
+    <!-- GitHub图标已删除 -->
   </div>
 </template>
 
@@ -676,22 +674,7 @@ function submitRegister() {
   top: 6px;
 }
 
-.github {
-  position: fixed;
-  width: 35px;
-  height: 35px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  background: var(--el-bg-color);
-  bottom: 10px;
-  right: 10px;
-  z-index: 1000;
-  border: 1px solid var(--el-border-color-light);
-  box-shadow: var(--el-box-shadow-light);
-  cursor: pointer;
-}
+/* GitHub图标样式已删除 */
 
 :deep(.el-input-group__append) {
   padding: 0 !important;
