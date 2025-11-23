@@ -125,7 +125,7 @@ const zh = {
     home: '返回首页',
     loginBtn: '登录',
     regBtn: '注册',
-    loginTitle: '输入账号信息以开始使用邮箱系统',
+    loginTitle: '欢迎使用China_zzk的邮箱系统',
     regTitle: '输入账号密码以开始注册邮箱系统',
     confirmPwd: '确认密码',
     regKeyOptional: '注册码（可选）',
