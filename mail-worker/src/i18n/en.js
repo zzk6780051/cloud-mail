@@ -65,6 +65,11 @@ const en = {
 	notAdmin: 'The entered email is not an administrator email',
 	emailExistDatabase: 'Email already exists in the database',
 	notConfigOss: 'Object storage not configured',
+	backupNoFile: 'Please select a backup file',
+	backupImportSuccess: 'Database imported successfully',
+	backupImportFail: 'Database import failed',
+	backupExportFail: 'Database export failed',
+	backupInvalidFile: 'Invalid backup file',
 	perms: {
 		"邮件": "Emails",
 		"邮件发送": "Send Email",

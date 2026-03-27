@@ -353,6 +353,41 @@
           </div>
 
           <div class="settings-card about">
+            <div class="card-title">{{ $t('databaseBackup') }}</div>
+            <div class="card-content">
+              <div class="setting-item">
+                <div>
+                  <span>{{ $t('exportDatabase') }}</span>
+                  <el-tooltip effect="dark" :content="$t('exportDatabaseDesc')">
+                    <Icon class="warning" icon="fe:warning" width="18" height="18"/>
+                  </el-tooltip>
+                </div>
+                <div>
+                  <el-button class="opt-button" size="small" type="primary" @click="handleExportDatabase" :loading="exportLoading">
+                    <Icon icon="mdi:download" width="16" height="16"/>
+                  </el-button>
+                </div>
+              </div>
+              <div class="setting-item">
+                <div>
+                  <span>{{ $t('importDatabase') }}</span>
+                  <el-tooltip effect="dark" :content="$t('importDatabaseDesc')">
+                    <Icon class="warning" icon="fe:warning" width="18" height="18"/>
+                  </el-tooltip>
+                </div>
+                <div>
+                  <el-button class="opt-button" size="small" type="primary" @click="triggerImportDatabase" :loading="importLoading">
+                    <Icon icon="mdi:upload" width="16" height="16"/>
+                  </el-button>
+                  <input ref="backupFileInput" type="file" accept=".json" style="display: none" @change="handleImportDatabase"/>
+                </div>
+              </div>
+              <div class="backup-warning">
+                <el-text type="warning" size="small">{{ $t('backupWarning') }}</el-text>
+              </div>
+            </div>
+          </div>
+          <div class="settings-card about">
             <div class="card-title">{{ $t('about') }}</div>
             <div class="card-content">
               <div class="concerning-item">
@@ -735,6 +770,7 @@
 <script setup>
 import {computed, defineOptions, reactive, ref} from "vue";
 import {deleteBackground, setBackground, settingQuery, settingSet} from "@/request/setting.js";
+import {backupExport, backupImport} from "@/request/backup.js";
 import {useSettingStore} from "@/store/setting.js";
 import {useUiStore} from "@/store/ui.js";
 import {useUserStore} from "@/store/user.js";
@@ -779,6 +815,9 @@ const {settings: setting} = storeToRefs(settingStore);
 const editTitle = ref('')
 const settingLoading = ref(false)
 const clearS3Loading = ref(false)
+const exportLoading = ref(false)
+const importLoading = ref(false)
+const backupFileInput = ref(null)
 const r2DomainInput = ref('')
 const loginOpacity = ref(0)
 const minEmailPrefix = ref(0)
@@ -1293,6 +1332,80 @@ function jump(href) {
   doc.click()
 }
 
+async function handleExportDatabase() {
+  exportLoading.value = true
+  try {
+    const blob = await backupExport()
+    const url = URL.createObjectURL(blob)
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)
+    const filename = `cloud-mail-backup-${timestamp}.json`
+    
+    const a = document.createElement('a')
+    a.href = url
+    a.download = filename
+    a.click()
+    
+    URL.revokeObjectURL(url)
+    ElMessage({
+      message: t('exportSuccess'),
+      type: 'success',
+      plain: true
+    })
+  } catch (e) {
+    ElMessage({
+      message: e.message || t('exportFail'),
+      type: 'error',
+      plain: true
+    })
+  } finally {
+    exportLoading.value = false
+  }
+}
+
+function triggerImportDatabase() {
+  backupFileInput.value?.click()
+}
+
+async function handleImportDatabase(event) {
+  const file = event.target.files?.[0]
+  if (!file) return
+  
+  try {
+    await ElMessageBox.confirm(t('backupConfirm'), {
+      confirmButtonText: t('confirm'),
+      cancelButtonText: t('cancel'),
+      type: 'warning'
+    })
+    
+    importLoading.value = true
+    const result = await backupImport(file)
+    
+    ElMessage({
+      message: t('importSuccess'),
+      type: 'success',
+      plain: true
+    })
+    
+    // 刷新页面以应用新数据
+    setTimeout(() => {
+      location.reload()
+    }, 1500)
+    
+  } catch (e) {
+    if (e !== 'cancel') {
+      ElMessage({
+        message: e.message || t('importFail'),
+        type: 'error',
+        plain: true
+      })
+    }
+  } finally {
+    importLoading.value = false
+    // 清空文件输入
+    event.target.value = ''
+  }
+}
+
 function editSetting(settingForm, refreshStatus = true) {
   if (settingLoading.value) return
   settingLoading.value = true
@@ -1748,6 +1861,13 @@ function editSetting(settingForm, refreshStatus = true) {
     align-items: center;
     gap: 5px;
   }
+}
+
+.backup-warning {
+  margin-top: 10px;
+  padding: 10px;
+  background: var(--el-color-warning-light-9);
+  border-radius: 4px;
 }
 
 .concerning-item {

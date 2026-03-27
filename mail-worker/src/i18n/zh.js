@@ -65,6 +65,11 @@ const zh = {
 	notAdmin: '输入的邮箱不是管理员邮箱',
 	emailExistDatabase: '有邮箱已存在数据库中',
 	notConfigOss: '对象存储未配置',
+	backupNoFile: '请选择备份文件',
+	backupImportSuccess: '数据库导入成功',
+	backupImportFail: '数据库导入失败',
+	backupExportFail: '数据库导出失败',
+	backupInvalidFile: '无效的备份文件',
 	perms: {
 		"邮件": "邮件",
 		"邮件发送": "邮件发送",

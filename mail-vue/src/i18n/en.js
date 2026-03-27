@@ -324,7 +324,19 @@ const en = {
     searchUser: 'Search by user',
     searchEmail: 'Search by Email',
     searchSender: 'Search by Sender',
-    userEmail: 'Email Address'
+    userEmail: 'Email Address',
+    databaseBackup: 'Database Backup',
+    exportDatabase: 'Export Database',
+    importDatabase: 'Import Database',
+    exportDatabaseDesc: 'Export current database as SQL file',
+    importDatabaseDesc: 'Restore database from SQL file',
+    exportSuccess: 'Export successful',
+    importSuccess: 'Import successful',
+    importFail: 'Import failed',
+    exportFail: 'Export failed',
+    selectBackupFile: 'Select backup file',
+    backupConfirm: 'Importing will overwrite current data. Continue?',
+    backupWarning: 'Warning: Import operation is irreversible, please proceed with caution'
 }
 
 export default en

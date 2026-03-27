@@ -324,6 +324,18 @@ const zh = {
     searchUser: '搜索用户',
     searchEmail: '搜索邮箱',
     searchSender: '搜索发件人',
-    userEmail: '用户邮箱'
+    userEmail: '用户邮箱',
+    databaseBackup: '数据库备份',
+    exportDatabase: '导出数据库',
+    importDatabase: '导入数据库',
+    exportDatabaseDesc: '导出当前数据库为 SQL 文件',
+    importDatabaseDesc: '从 SQL 文件恢复数据库',
+    exportSuccess: '导出成功',
+    importSuccess: '导入成功',
+    importFail: '导入失败',
+    exportFail: '导出失败',
+    selectBackupFile: '选择备份文件',
+    backupConfirm: '导入数据库将覆盖当前数据，确定继续吗？',
+    backupWarning: '注意：导入操作不可逆，请谨慎操作'
 }
 export default zh
