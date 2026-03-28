@@ -143,8 +143,24 @@ const emailService = {
 			.run();
 	},
 
-	receive(c, params, cidAttList, r2domain) {
+	selectByHash(c, hash) {
+		return orm(c).select().from(email).where(eq(email.hash, hash)).get();
+	},
+
+	updateByHash(c, hash, params) {
+		return orm(c).update(email).set(params).where(eq(email.hash, hash)).returning().get();
+	},
+
+	async receive(c, params, cidAttList, r2domain) {
 		params.content = this.imgReplace(params.content, cidAttList, r2domain)
+		if (params.hash) {
+			const existEmail = await this.selectByHash(c, params.hash);
+			if (existEmail) {
+				await attService.removeByEmailIds(c, [existEmail.emailId]);
+				const { hash, ...updateParams } = params;
+				return await this.updateByHash(c, params.hash, updateParams);
+			}
+		}
 		return orm(c).insert(email).values({ ...params }).returning().get();
 	},
 

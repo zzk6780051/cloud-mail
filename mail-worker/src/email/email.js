@@ -11,6 +11,14 @@ import roleService from '../service/role-service';
 import userService from '../service/user-service';
 import telegramService from '../service/telegram-service';
 
+async function genEmailHash(sendEmail, toEmail, subject, messageId) {
+	const data = `${sendEmail}:${toEmail}:${subject}:${messageId || ''}`;
+	const encoder = new TextEncoder();
+	const hashBuffer = await crypto.subtle.digest('SHA-256', encoder.encode(data));
+	const hashArray = Array.from(new Uint8Array(hashBuffer));
+	return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
 export async function email(message, env, ctx) {
 
 	try {
@@ -80,6 +88,8 @@ export async function email(message, env, ctx) {
 
 		const toName = email.to.find(item => item.address === message.to)?.name || '';
 
+		const hash = await genEmailHash(email.from.address, message.to, email.subject, email.messageId);
+
 		const params = {
 			toEmail: message.to,
 			toName: toName,
@@ -94,6 +104,7 @@ export async function email(message, env, ctx) {
 			inReplyTo: email.inReplyTo,
 			relation: email.references,
 			messageId: email.messageId,
+			hash: hash,
 			userId: account ? account.userId : 0,
 			accountId: account ? account.accountId : 0,
 			isDel: isDel.DELETE,
