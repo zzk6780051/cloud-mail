@@ -1,9 +1,5 @@
 import http from '@/axios/index.js';
 
-/**
- * 导出数据库（D1 + KV）
- * 返回 JSON 文件的 Blob
- */
 export function backupExport() {
 	return fetch(import.meta.env.VITE_BASE_URL + '/backup/export', {
 		method: 'GET',
@@ -21,10 +17,6 @@ export function backupExport() {
 	});
 }
 
-/**
- * 导入数据库（D1 + KV）
- * @param {File} file - JSON 备份文件
- */
 export function backupImport(file) {
 	const formData = new FormData();
 	formData.append('file', file);

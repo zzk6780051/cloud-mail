@@ -790,7 +790,7 @@ defineOptions({
   name: 'sys-setting'
 })
 
-const currentVersion = 'v2.9.0'
+const currentVersion = 'v2.9.1'
 const hasUpdate = ref(false)
 let getUpdateErrorCount = 1;
 const {t, locale} = useI18n();
@@ -1386,7 +1386,6 @@ async function handleImportDatabase(event) {
       plain: true
     })
     
-    // 刷新页面以应用新数据
     setTimeout(() => {
       location.reload()
     }, 1500)
@@ -1401,7 +1400,6 @@ async function handleImportDatabase(event) {
     }
   } finally {
     importLoading.value = false
-    // 清空文件输入
     event.target.value = ''
   }
 }
