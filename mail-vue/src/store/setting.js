@@ -6,6 +6,8 @@ export const useSettingStore = defineStore('setting', {
         settings: {
             r2Domain: '',
             loginOpacity: 1.00,
+            endpoint: '',
+            bucket: '',
         },
         lang: '',
     }),

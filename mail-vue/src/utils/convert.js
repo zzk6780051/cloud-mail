@@ -11,6 +11,19 @@ export function cvtR2Url(key) {
 
     const { settings } = useSettingStore();
 
+    // 优先使用 S3 配置（endpoint + bucket）
+    if (settings.endpoint && settings.bucket) {
+        let endpoint = settings.endpoint;
+        if (!endpoint.startsWith('http')) {
+            endpoint = 'https://' + endpoint;
+        }
+        if (endpoint.endsWith("/")) {
+            endpoint = endpoint.slice(0, -1);
+        }
+        return endpoint + '/' + settings.bucket + '/' + key;
+    }
+
+    // 其次使用 r2Domain
     let domain = settings.r2Domain
 
     if (!domain) {
