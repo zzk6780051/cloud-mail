@@ -144,7 +144,7 @@ const emailService = {
 	},
 
 	selectByHash(c, hash) {
-		return orm(c).select().from(email).where(eq(email.hash, hash)).get();
+		return orm(c).select().from(email).where(and(eq(email.hash, hash), eq(email.isDel, isDel.NORMAL))).get();
 	},
 
 	updateByHash(c, hash, params) {
