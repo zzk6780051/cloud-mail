@@ -72,6 +72,41 @@ const r2Service = {
 			await s3Service.deleteObj(c, key);
 		}
 
+	},
+
+	//把对象读成合法的 Response。对象不存在时返回 404，而不是 null
+	//（fetch 返回 null 会让 Cloudflare 抛 error 1101）
+	async toObjResp(c, key) {
+
+		let obj;
+
+		try {
+			obj = await this.getObj(c, key);
+		} catch (e) {
+			//S3 后端读不存在的对象时会抛 NoSuchKey
+			obj = null;
+		}
+
+		if (!obj) {
+			return new Response('Not Found', {
+				status: 404,
+				headers: { 'Content-Type': 'text/plain; charset=utf-8' }
+			});
+		}
+
+		//KV/S3 后端返回的已经是 Response
+		if (obj instanceof Response) {
+			return obj;
+		}
+
+		const headers = new Headers();
+
+		if (typeof obj.writeHttpMetadata === 'function') {
+			obj.writeHttpMetadata(headers);
+			headers.set('etag', obj.httpEtag);
+		}
+
+		return new Response(obj.body, { headers });
 	}
 
 };
