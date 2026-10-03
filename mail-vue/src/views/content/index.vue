@@ -55,7 +55,7 @@
                 <div class="att-size">{{ formatBytes(att.size) }}</div>
                 <div class="opt-icon att-icon">
                   <Icon v-if="isImage(att.filename)" icon="hugeicons:view" width="22" height="22" @click="showImage(att.key)"/>
-                  <a :href="cvtR2Url(att.key)" download>
+                  <a :href="'/api/oss/' + att.key" :download="att.filename">
                     <Icon icon="system-uicons:push-down" width="22" height="22"/>
                   </a>
                 </div>
